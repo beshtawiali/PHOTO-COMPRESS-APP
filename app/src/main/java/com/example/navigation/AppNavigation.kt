@@ -12,12 +12,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.ui.components.CustomBottomNavigation
+import com.example.ui.screens.AboutUsScreen
 import com.example.ui.screens.BatchScreen
 import com.example.ui.screens.CompressScreen
 import com.example.ui.screens.HistoryScreen
 import com.example.ui.screens.HomeScreen
 import com.example.ui.screens.OnboardingScreen
 import com.example.ui.screens.PremiumScreen
+import com.example.ui.screens.PrivacyPolicyScreen
 import com.example.ui.screens.ResizeScreen
 import com.example.ui.screens.ResultScreen
 import com.example.ui.screens.SettingsScreen
@@ -56,10 +58,17 @@ fun AppNavigation(viewModel: MainViewModel) {
                 CustomBottomNavigation(
                     currentRoute = currentRoute,
                     onNavigate = { route ->
-                        navController.navigate(route) {
-                            popUpTo("home") { saveState = true }
-                            launchSingleTop = true
-                            restoreState = true
+                        if (route == "home") {
+                            navController.navigate("home") {
+                                popUpTo("home") { inclusive = true }
+                                launchSingleTop = true
+                            }
+                        } else {
+                            navController.navigate(route) {
+                                popUpTo("home") { saveState = true }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                         }
                     }
                 )
@@ -212,7 +221,21 @@ fun AppNavigation(viewModel: MainViewModel) {
                     onSetThemeMode = { viewModel.setThemeMode(it) },
                     onSetDefaultQuality = { viewModel.setDefaultQuality(it) },
                     onSetDefaultFormat = { viewModel.setDefaultFormat(it) },
-                    onOpenPremium = { navController.navigate("premium") }
+                    onOpenPremium = { navController.navigate("premium") },
+                    onOpenPrivacyPolicy = { navController.navigate("privacy") },
+                    onOpenAboutUs = { navController.navigate("about") }
+                )
+            }
+
+            composable("privacy") {
+                PrivacyPolicyScreen(
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable("about") {
+                AboutUsScreen(
+                    onBack = { navController.popBackStack() }
                 )
             }
 

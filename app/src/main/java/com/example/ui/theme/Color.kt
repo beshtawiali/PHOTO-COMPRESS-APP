@@ -2,39 +2,60 @@ package com.example.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Light Turquoise Material 3 Palette
-val PolishPrimary = Color(0xFF009688)
-val PolishOnPrimary = Color(0xFFFFFFFF)
-val PolishPrimaryContainer = Color(0xFFE0F2F1)
-val PolishOnPrimaryContainer = Color(0xFF003738)
+// Royal Purple Brand Palette (#5D5FEF)
+val RoyalPurplePrimary = Color(0xFF5D5FEF)
+val RoyalPurpleOnPrimary = Color(0xFFFFFFFF)
+val RoyalPurplePrimaryContainer = Color(0xFFEEEDFD)
+val RoyalPurpleOnPrimaryContainer = Color(0xFF1E1E62)
 
-val PolishSecondary = Color(0xFF00838F)
-val PolishOnSecondary = Color(0xFFFFFFFF)
-val PolishSecondaryContainer = Color(0xFFE0F7FA)
-val PolishOnSecondaryContainer = Color(0xFF00363A)
+val RoyalPurpleSecondary = Color(0xFF4A49CB)
+val RoyalPurpleOnSecondary = Color(0xFFFFFFFF)
+val RoyalPurpleSecondaryContainer = Color(0xFFE2E3FC)
+val RoyalPurpleOnSecondaryContainer = Color(0xFF151458)
 
-val PolishTertiaryContainer = Color(0xFF2DD4BF)
+val BackgroundLightLavender = Color(0xFFF4F6FC)
+val OnBackgroundDarkText = Color(0xFF1E2038)
+val SurfacePureWhite = Color(0xFFFFFFFF)
+val OnSurfaceDarkText = Color(0xFF1E2038)
 
-val PolishBackgroundLight = Color(0xFFF2FAF9)
-val PolishOnBackgroundLight = Color(0xFF0F172A)
-val PolishSurfaceLight = Color(0xFFFFFFFF)
-val PolishOnSurfaceLight = Color(0xFF0F172A)
-val PolishSurfaceVariantLight = Color(0xFFE0F2F1)
-val PolishOnSurfaceVariantLight = Color(0xFF335C58)
-val PolishSurfaceContainerLight = Color(0xFFE6F5F5)
-val PolishSurfaceContainerHighLight = Color(0xFFD4EAEA)
-val PolishOutlineLight = Color(0xFFB2DFDB)
+val SurfaceVariantLight = Color(0xFFE9EDF8)
+val OnSurfaceVariantMuted = Color(0xFF6B7280)
+val SurfaceContainerLight = Color(0xFFF0F3FA)
+val SurfaceContainerHighLight = Color(0xFFE4E9F5)
+val OutlineBorderLight = Color(0xFFDCDFEA)
 
-val PolishBackgroundDark = Color(0xFF081C1D)
-val PolishOnBackgroundDark = Color(0xFFE0F2F1)
-val PolishSurfaceDark = Color(0xFF0C2324)
-val PolishOnSurfaceDark = Color(0xFFE0F2F1)
-val PolishSurfaceVariantDark = Color(0xFF163C3C)
-val PolishOnSurfaceVariantDark = Color(0xFFB2DFDB)
-val PolishSurfaceContainerDark = Color(0xFF122D2E)
-val PolishSurfaceContainerHighDark = Color(0xFF193839)
-val PolishOutlineDark = Color(0xFF26A69A)
+// Dark Theme Variants
+val BackgroundDarkTheme = Color(0xFF0F1021)
+val OnBackgroundDarkTheme = Color(0xFFF4F6FC)
+val SurfaceDarkTheme = Color(0xFF181A32)
+val OnSurfaceDarkTheme = Color(0xFFF4F6FC)
 
-val AccentGreen = Color(0xFF2E7D32)
-val AccentRed = Color(0xFFB00020)
+// Grid Accent Container Colors (matching reference UI grid cards)
+val GridYellowBg = Color(0xFFFFF3D6)
+val GridYellowIcon = Color(0xFFD97706)
+
+val GridOrangeBg = Color(0xFFFFEAD8)
+val GridOrangeIcon = Color(0xFFEA580C)
+
+val GridPurpleBg = Color(0xFFEEEDFD)
+val GridPurpleIcon = Color(0xFF5D5FEF)
+
+val GridGreenBg = Color(0xFFE3F7EB)
+val GridGreenIcon = Color(0xFF10B981)
+
+val GridBlueBg = Color(0xFFE0F2FE)
+val GridBlueIcon = Color(0xFF0EA5E9)
+
+val GridPinkBg = Color(0xFFFCE7F3)
+val GridPinkIcon = Color(0xFFEC4899)
+
+val GridTealBg = Color(0xFFCCFBF1)
+val GridTealIcon = Color(0xFF0D9488)
+
+val GridIndigoBg = Color(0xFFF3E8FF)
+val GridIndigoIcon = Color(0xFF9333EA)
+
+val AccentSuccessGreen = Color(0xFF10B981)
+val AccentErrorRed = Color(0xFFEF4444)
+
 

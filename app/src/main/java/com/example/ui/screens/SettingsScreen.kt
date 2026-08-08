@@ -23,9 +23,12 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Policy
+import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.WorkspacePremium
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -34,7 +37,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -52,8 +60,13 @@ fun SettingsScreen(
     onSetThemeMode: (String) -> Unit,
     onSetDefaultQuality: (Int) -> Unit,
     onSetDefaultFormat: (String) -> Unit,
-    onOpenPremium: () -> Unit
+    onOpenPremium: () -> Unit,
+    onOpenPrivacyPolicy: () -> Unit = {},
+    onOpenAboutUs: () -> Unit = {}
 ) {
+    var showAboutDialog by remember { mutableStateOf(false) }
+    var showPrivacyDialog by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -291,7 +304,7 @@ fun SettingsScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         // About Section
-        SectionHeader(title = "About", icon = Icons.Filled.Info)
+        SectionHeader(title = "About & Privacy", icon = Icons.Filled.Info)
         Spacer(modifier = Modifier.height(8.dp))
 
         Card(
@@ -300,15 +313,134 @@ fun SettingsScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(vertical = 8.dp)) {
-                SettingLinkRow(title = "Version", value = "1.0.0 (Build 1)")
+                SettingLinkRow(
+                    title = "About Photo Compressor",
+                    value = "v1.0.0",
+                    icon = Icons.Filled.ChevronRight,
+                    onClick = { showAboutDialog = true }
+                )
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
-                SettingLinkRow(title = "Privacy Policy", icon = Icons.Filled.Policy)
+                SettingLinkRow(
+                    title = "Privacy Policy",
+                    icon = Icons.Filled.ChevronRight,
+                    onClick = { showPrivacyDialog = true }
+                )
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
-                SettingLinkRow(title = "Rate App", icon = Icons.Filled.Star)
+                SettingLinkRow(
+                    title = "Rate & Feedback",
+                    icon = Icons.Filled.ChevronRight,
+                    onClick = { showAboutDialog = true }
+                )
             }
         }
 
         Spacer(modifier = Modifier.height(32.dp))
+    }
+
+    if (showAboutDialog) {
+        AlertDialog(
+            onDismissRequest = { showAboutDialog = false },
+            icon = {
+                Icon(
+                    imageVector = Icons.Filled.Info,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(32.dp)
+                )
+            },
+            title = {
+                Text(
+                    text = "Photo Compressor",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
+            },
+            text = {
+                Column {
+                    Text(
+                        text = "Version 1.0.0 (Build 1)",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "A fast, high-performance, and 100% private photo compression & resizing application built with Kotlin and Jetpack Compose. All calculations execute locally on your phone.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        lineHeight = 18.sp
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showAboutDialog = false
+                        onOpenAboutUs()
+                    }
+                ) {
+                    Text("View Full Details", fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showAboutDialog = false }) {
+                    Text("Close")
+                }
+            }
+        )
+    }
+
+    if (showPrivacyDialog) {
+        AlertDialog(
+            onDismissRequest = { showPrivacyDialog = false },
+            icon = {
+                Icon(
+                    imageVector = Icons.Filled.Shield,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(32.dp)
+                )
+            },
+            title = {
+                Text(
+                    text = "Privacy Policy",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
+            },
+            text = {
+                Column {
+                    Text(
+                        text = "100% On-Device Storage & Processing",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Your photos are processed entirely on your local phone hardware. No images, EXIF metadata, or personal files are ever uploaded, transmitted, or stored on remote cloud servers.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        lineHeight = 18.sp
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showPrivacyDialog = false
+                        onOpenPrivacyPolicy()
+                    }
+                ) {
+                    Text("Read Full Policy", fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showPrivacyDialog = false }) {
+                    Text("Close")
+                }
+            }
+        )
     }
 }
 

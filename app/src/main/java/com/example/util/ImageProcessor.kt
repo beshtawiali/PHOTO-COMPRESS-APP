@@ -244,7 +244,7 @@ object ImageProcessor {
         val resultHeight = currentBitmap.height
         currentBitmap.recycle()
 
-        // 4. Save to temporary cache file first for preview
+        // 4. Save to persistent app files directory
         val ext = when (targetFormat) {
             OutputFormat.JPEG -> "jpg"
             OutputFormat.PNG -> "png"
@@ -253,8 +253,8 @@ object ImageProcessor {
         val cleanName = meta.fileName.substringBeforeLast('.')
         val outputFileName = "${cleanName}_optimized.$ext"
 
-        val cacheDir = File(context.cacheDir, "processed_photos").apply { mkdirs() }
-        val outputFile = File(cacheDir, outputFileName)
+        val storageDir = File(context.filesDir, "processed_photos").apply { mkdirs() }
+        val outputFile = File(storageDir, outputFileName)
         FileOutputStream(outputFile).use { fos ->
             fos.write(byteArray)
         }
@@ -353,15 +353,59 @@ object ImageProcessor {
         null
     }
 
-    fun shareImage(context: Context, uri: Uri) {
-        val intent = Intent(Intent.ACTION_SEND).apply {
-            type = "image/*"
-            putExtra(Intent.EXTRA_STREAM, uri)
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    fun isUriValid(context: Context, uriString: String?): Boolean {
+        if (uriString.isNull_or_blank()) return false
+        return try {
+            val uri = Uri.parse(uriString)
+            if (uri.scheme == "file") {
+                val path = uri.path ?: return false
+                File(path).exists()
+            } else if (uri.scheme == "content") {
+                context.contentResolver.openInputStream(uri)?.use { true } ?: false
+            } else {
+                File(uriString).exists()
+            }
+        } catch (e: Exception) {
+            false
         }
-        val chooser = Intent.createChooser(intent, "Share Image")
-        chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(chooser)
+    }
+
+    fun shareImage(context: Context, uri: Uri) {
+        try {
+            val contentUri = if (uri.scheme == "file") {
+                val path = uri.path ?: ""
+                val file = File(path)
+                if (file.exists()) {
+                    androidx.core.content.FileProvider.getUriForFile(
+                        context,
+                        "${context.packageName}.fileprovider",
+                        file
+                    )
+                } else {
+                    uri
+                }
+            } else {
+                uri
+            }
+
+            val mimeType = context.contentResolver.getType(contentUri) ?: "image/*"
+
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = mimeType
+                putExtra(Intent.EXTRA_STREAM, contentUri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            val chooser = Intent.createChooser(intent, "Share Photo")
+            chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(chooser)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            android.widget.Toast.makeText(
+                context,
+                "Unable to share photo. File may no longer exist.",
+                android.widget.Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     fun shareMultipleImages(context: Context, uris: List<Uri>) {

@@ -22,6 +22,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "Photo Compressor & Resizer"
+rootProject.name = "Photo Compressor"
 
 include(":app")
