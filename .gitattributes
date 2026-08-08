@@ -1,0 +1,12 @@
+# Declare binary files to prevent line-ending conversion or text transformation corruption
+*.jar binary
+*.class binary
+*.png binary
+*.jpg binary
+*.keystore binary
+*.jks binary
+
+# Set line endings for shell scripts and Gradle wrappers
+gradlew text eol=lf
+*.sh text eol=lf
+*.bat text eol=crlf

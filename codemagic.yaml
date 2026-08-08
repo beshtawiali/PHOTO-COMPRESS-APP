@@ -11,9 +11,15 @@ workflows:
       - name: Set up local.properties
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
-      - name: Make Gradle wrapper executable
+      - name: Verify and fix Gradle wrapper
         script: |
           chmod +x gradlew
+          if ! jar tf gradle/wrapper/gradle-wrapper.jar >/dev/null 2>&1; then
+            echo "gradle-wrapper.jar is missing or corrupted, restoring valid wrapper jar..."
+            mkdir -p gradle/wrapper
+            curl -sSL "https://raw.githubusercontent.com/gradle/gradle/v9.3.1/gradle/wrapper/gradle-wrapper.jar" -o gradle/wrapper/gradle-wrapper.jar || \
+            curl -sSL "https://repo.maven.apache.org/maven2/org/gradle/gradle-wrapper/9.3.1/gradle-wrapper-9.3.1.jar" -o gradle/wrapper/gradle-wrapper.jar
+          fi
       - name: Build Android App Bundle
         script: |
           ./gradlew bundleRelease
