@@ -1,5 +1,6 @@
 package com.tayf.photocompressor.ui.screens
 
+import androidx.activity.compose.BackHandler
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -78,6 +79,10 @@ fun ResultScreen(
     onDone: () -> Unit
 ) {
     val context = LocalContext.current
+
+    BackHandler {
+        onDone()
+    }
 
     Scaffold(
         topBar = {

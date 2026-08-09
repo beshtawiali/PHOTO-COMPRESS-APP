@@ -22,7 +22,9 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -53,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.tayf.photocompressor.data.model.BatchItemStatus
+import com.tayf.photocompressor.ui.components.AppodealBannerView
 import com.tayf.photocompressor.data.model.BatchQueueItem
 import com.tayf.photocompressor.data.model.ImageCompressOptions
 import com.tayf.photocompressor.ui.viewmodel.BatchProcessState
@@ -102,55 +105,66 @@ fun BatchScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         if (batchItems.isEmpty()) {
-            // Empty State Card
-            Card(
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer
-                ),
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 24.dp)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
+                // Empty State Card
+                Card(
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainer
+                    ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(32.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .padding(top = 24.dp, bottom = 16.dp)
                 ) {
-                    Icon(
-                        imageVector = Icons.Filled.BatchPrediction,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(56.dp)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "No images in queue",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "Select multiple photos from your device gallery to compress or resize them simultaneously.",
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Button(
-                        onClick = {
-                            addImagesPicker.launch(
-                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                            )
-                        },
-                        shape = RoundedCornerShape(20.dp)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(32.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Icon(imageVector = Icons.Filled.Add, contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Select Photos")
+                        Icon(
+                            imageVector = Icons.Filled.BatchPrediction,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(56.dp)
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = "No images in queue",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Select multiple photos from your device gallery to compress or resize them simultaneously.",
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Button(
+                            onClick = {
+                                addImagesPicker.launch(
+                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                )
+                            },
+                            shape = RoundedCornerShape(20.dp)
+                        ) {
+                            Icon(imageVector = Icons.Filled.Add, contentDescription = null)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text("Select Photos")
+                        }
                     }
                 }
+
+                Spacer(modifier = Modifier.height(20.dp))
+                AppodealBannerView()
+                Spacer(modifier = Modifier.height(24.dp))
             }
         } else {
             // Mode Selector (Compress vs Resize)
@@ -286,6 +300,14 @@ fun BatchScreen(
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(text = "Add More Images", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                         }
+                    }
+                }
+
+                item(span = { GridItemSpan(2) }) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        AppodealBannerView()
+                        Spacer(modifier = Modifier.height(12.dp))
                     }
                 }
             }

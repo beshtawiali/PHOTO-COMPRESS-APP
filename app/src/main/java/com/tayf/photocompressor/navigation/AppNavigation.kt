@@ -12,6 +12,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.tayf.photocompressor.ui.components.CustomBottomNavigation
+import com.tayf.photocompressor.ui.components.findActivity
+import com.tayf.photocompressor.util.AdManager
 import com.tayf.photocompressor.ui.screens.AboutUsScreen
 import com.tayf.photocompressor.ui.screens.BatchScreen
 import com.tayf.photocompressor.ui.screens.CompressScreen
@@ -176,7 +178,12 @@ fun AppNavigation(viewModel: MainViewModel) {
                     onSelectMoreImages = { viewModel.selectBatchImages(batchItems.map { item -> item.uri } + it) },
                     onUpdateQuality = { viewModel.updateCustomQuality(it) },
                     onExecuteBatch = { viewModel.executeBatchProcessing() },
-                    onBatchFinishedNavToResult = { navController.navigate("history") }
+                    onBatchFinishedNavToResult = {
+                        navController.context.findActivity()?.let { act ->
+                            AdManager.instance.showInterstitialIfPending(act)
+                        }
+                        navController.navigate("history")
+                    }
                 )
             }
 
@@ -190,12 +197,18 @@ fun AppNavigation(viewModel: MainViewModel) {
                     onSaveToGallery = { res -> viewModel.saveResultToGallery(res) {} },
                     onShare = { uri -> ImageProcessor.shareImage(navController.context, uri) },
                     onProcessAnother = {
+                        navController.context.findActivity()?.let { act ->
+                            AdManager.instance.showInterstitialIfPending(act)
+                        }
                         viewModel.resetSingleProcessState()
                         navController.navigate("home") {
                             popUpTo("home") { inclusive = true }
                         }
                     },
                     onDone = {
+                        navController.context.findActivity()?.let { act ->
+                            AdManager.instance.showInterstitialIfPending(act)
+                        }
                         viewModel.resetSingleProcessState()
                         navController.navigate("home") {
                             popUpTo("home") { inclusive = true }

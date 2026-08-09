@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        AdManager.instance.initialize(applicationContext)
+        AdManager.instance.initialize(this)
 
         setContent {
             val themeMode by viewModel.themeMode.collectAsState()

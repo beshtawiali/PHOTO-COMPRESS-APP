@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tayf.photocompressor.R
 import com.tayf.photocompressor.data.model.ProcessedImageEntity
+import com.tayf.photocompressor.ui.components.AppodealBannerView
 import com.tayf.photocompressor.ui.theme.GridBlueBg
 import com.tayf.photocompressor.ui.theme.GridBlueIcon
 import com.tayf.photocompressor.ui.theme.GridOrangeBg
@@ -318,6 +319,12 @@ fun HomeScreen(
                     )
                 }
             }
+        }
+
+        // Appodeal Banner Ad Placement (Below the 4 Primary Tool Cards)
+        item {
+            Spacer(modifier = Modifier.height(20.dp))
+            AppodealBannerView()
         }
 
         item {

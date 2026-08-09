@@ -56,6 +56,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import com.tayf.photocompressor.data.model.ProcessedImageEntity
+import com.tayf.photocompressor.ui.components.AppodealBannerView
 import com.tayf.photocompressor.util.ImageProcessor
 
 @Composable
@@ -163,9 +164,19 @@ fun HistoryScreen(
                     )
                 }
                 item {
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
                 }
             }
+        }
+
+        // Dedicated Banner area immediately above the Bottom Navigation
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp, bottom = 4.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            AppodealBannerView()
         }
     }
 

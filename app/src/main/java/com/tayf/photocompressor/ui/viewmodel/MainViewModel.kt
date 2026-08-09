@@ -16,6 +16,7 @@ import com.tayf.photocompressor.data.model.OutputFormat
 import com.tayf.photocompressor.data.model.ProcessedImageEntity
 import com.tayf.photocompressor.data.model.ResizePreset
 import com.tayf.photocompressor.data.repository.HistoryRepository
+import com.tayf.photocompressor.util.AdManager
 import com.tayf.photocompressor.util.AnalyticsManager
 import com.tayf.photocompressor.util.ImageProcessor
 import com.tayf.photocompressor.util.ProcessResult
@@ -220,6 +221,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     (((result.originalSize - result.resultSize).toDouble() / result.originalSize) * 100).toInt()
                 } else 0
                 AnalyticsManager.logCompressionCompleted(savedPercent)
+                AdManager.instance.recordSuccessfulOperation()
                 _singleProcessState.value = SingleProcessState.Success(result)
             } catch (e: Exception) {
                 _singleProcessState.value = SingleProcessState.Error(
@@ -241,6 +243,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 )
                 saveResultToHistory(result, "Resize")
                 AnalyticsManager.logResizeCompleted()
+                AdManager.instance.recordSuccessfulOperation()
                 _singleProcessState.value = SingleProcessState.Success(result)
             } catch (e: Exception) {
                 _singleProcessState.value = SingleProcessState.Error(
@@ -343,6 +346,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
 
             AnalyticsManager.logBatchCompleted(successCount, failCount)
+            if (successCount > 0) {
+                AdManager.instance.recordSuccessfulOperation()
+            }
             _batchState.value = BatchProcessState.Completed(
                 results = results,
                 successCount = successCount,
