@@ -5,6 +5,8 @@ workflows:
     instance_type: mac_mini_m1
     environment:
       java: 17
+      android_signing:
+        - ali-bashtawy-upload
       vars:
         PACKAGE_NAME: "com.tayf.photocompressor"
     scripts:
