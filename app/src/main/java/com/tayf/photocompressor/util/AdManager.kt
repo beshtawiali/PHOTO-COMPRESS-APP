@@ -5,6 +5,8 @@ import android.util.Log
 import com.appodeal.ads.Appodeal
 import com.appodeal.ads.BannerCallbacks
 import com.appodeal.ads.InterstitialCallbacks
+import com.appodeal.ads.initializing.ApdInitializationCallback
+import com.appodeal.ads.initializing.ApdInitializationError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,12 +32,12 @@ class AdManager private constructor() {
                 // Set Banner Callbacks for diagnostic logging and state tracking
                 Appodeal.setBannerCallbacks(object : BannerCallbacks {
                     override fun onBannerLoaded(height: Int, isPrecache: Boolean) {
-                        Log.d("AdManager_Banner", "onBannerLoaded: height=$height, isPrecache=$isPrecache, isLoaded=${Appodeal.isLoaded(Appodeal.BANNER)}")
+                        Log.d("AdManager_Banner", "onBannerLoaded: height=$height, isPrecache=$isPrecache, isLoaded=${Appodeal.isLoaded(Appodeal.BANNER_VIEW)}")
                         _isBannerLoaded.value = true
                     }
 
                     override fun onBannerFailedToLoad() {
-                        Log.e("AdManager_Banner", "onBannerFailedToLoad: isLoaded=${Appodeal.isLoaded(Appodeal.BANNER)}")
+                        Log.d("AdManager_Banner", "onBannerFailedToLoad: isLoaded=${Appodeal.isLoaded(Appodeal.BANNER_VIEW)}")
                         _isBannerLoaded.value = false
                     }
 
@@ -44,7 +46,7 @@ class AdManager private constructor() {
                     }
 
                     override fun onBannerShowFailed() {
-                        Log.e("AdManager_Banner", "onBannerShowFailed")
+                        Log.w("AdManager_Banner", "onBannerShowFailed")
                     }
 
                     override fun onBannerClicked() {
@@ -64,7 +66,7 @@ class AdManager private constructor() {
                     }
 
                     override fun onInterstitialFailedToLoad() {
-                        Log.e("AdManager_Interstitial", "onInterstitialFailedToLoad")
+                        Log.d("AdManager_Interstitial", "onInterstitialFailedToLoad")
                     }
 
                     override fun onInterstitialShown() {
@@ -72,7 +74,7 @@ class AdManager private constructor() {
                     }
 
                     override fun onInterstitialShowFailed() {
-                        Log.e("AdManager_Interstitial", "onInterstitialShowFailed")
+                        Log.w("AdManager_Interstitial", "onInterstitialShowFailed")
                     }
 
                     override fun onInterstitialClicked() {
@@ -88,15 +90,35 @@ class AdManager private constructor() {
                     }
                 })
 
-                // Initialize ONLY BANNER and INTERSTITIAL
-                val adTypes = Appodeal.BANNER or Appodeal.INTERSTITIAL
+                // Initialize ONLY BANNER_VIEW and INTERSTITIAL
+                val adTypes = Appodeal.BANNER_VIEW or Appodeal.INTERSTITIAL
                 Appodeal.initialize(
                     activity,
                     APP_KEY,
-                    adTypes
+                    adTypes,
+                    object : ApdInitializationCallback {
+                        override fun onInitializationFinished(errors: List<ApdInitializationError>?) {
+                            if (errors.isNullOrEmpty()) {
+                                Log.d("AdManager", "Appodeal initialization completed successfully")
+                            } else {
+                                Log.e("AdManager", "Appodeal initialization completed with ${errors.size} error(s):")
+                                errors.forEachIndexed { index, err ->
+                                    Log.e("AdManager", "Error #$index: class/type=${err.javaClass.name}, message=${err.message}, details=$err")
+                                }
+                            }
+
+                            Log.d("AdManager", "Post-Init Diagnostic Check:")
+                            Log.d("AdManager", "isInitialized(BANNER_VIEW)=${Appodeal.isInitialized(Appodeal.BANNER_VIEW)}")
+                            Log.d("AdManager", "isInitialized(INTERSTITIAL)=${Appodeal.isInitialized(Appodeal.INTERSTITIAL)}")
+                            Log.d("AdManager", "isAutoCacheEnabled(BANNER_VIEW)=${Appodeal.isAutoCacheEnabled(Appodeal.BANNER_VIEW)}")
+                            Log.d("AdManager", "isAutoCacheEnabled(INTERSTITIAL)=${Appodeal.isAutoCacheEnabled(Appodeal.INTERSTITIAL)}")
+                            Log.d("AdManager", "isLoaded(BANNER_VIEW)=${Appodeal.isLoaded(Appodeal.BANNER_VIEW)}")
+                            Log.d("AdManager", "isLoaded(INTERSTITIAL)=${Appodeal.isLoaded(Appodeal.INTERSTITIAL)}")
+                        }
+                    }
                 )
                 isInitialized = true
-                Log.d("AdManager", "Appodeal SDK 4.3.0 initialized with BANNER and INTERSTITIAL for production.")
+                Log.d("AdManager", "Appodeal SDK 4.3.0 initialize called with BANNER_VIEW and INTERSTITIAL for production.")
             } catch (e: Exception) {
                 Log.e("AdManager", "Failed to initialize Appodeal SDK: ${e.message}", e)
             }

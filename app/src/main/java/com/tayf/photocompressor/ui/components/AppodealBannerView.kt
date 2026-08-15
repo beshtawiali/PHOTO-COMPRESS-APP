@@ -40,7 +40,7 @@ fun AppodealBannerView(
     val isBannerLoaded by AdManager.instance.isBannerLoaded.collectAsState()
 
     LaunchedEffect(activity) {
-        if (!Appodeal.isLoaded(Appodeal.BANNER_VIEW) && !Appodeal.isLoaded(Appodeal.BANNER)) {
+        if (!Appodeal.isLoaded(Appodeal.BANNER_VIEW)) {
             Log.d("AppodealBannerView", "Requesting banner load via Appodeal.cache")
             Appodeal.cache(activity, Appodeal.BANNER_VIEW)
         }
@@ -73,9 +73,8 @@ private fun attachBannerView(activity: Activity, frameLayout: FrameLayout, isBan
     if (frameLayout.id == View.NO_ID) {
         frameLayout.id = View.generateViewId()
     }
-    val isLoadedBanner = Appodeal.isLoaded(Appodeal.BANNER)
     val isLoadedBannerView = Appodeal.isLoaded(Appodeal.BANNER_VIEW)
-    Log.d("AppodealBannerView", "attachBannerView - isBannerLoadedState=$isBannerLoaded, isLoaded(BANNER)=$isLoadedBanner, isLoaded(BANNER_VIEW)=$isLoadedBannerView, childCount=${frameLayout.childCount}")
+    Log.d("AppodealBannerView", "attachBannerView - isBannerLoadedState=$isBannerLoaded, isLoaded(BANNER_VIEW)=$isLoadedBannerView, childCount=${frameLayout.childCount}")
 
     try {
         val showResult = Appodeal.show(activity, Appodeal.BANNER_VIEW)
@@ -103,7 +102,7 @@ private fun attachBannerView(activity: Activity, frameLayout: FrameLayout, isBan
                 Log.d("AppodealBannerView", "BannerView dimensions: width=${bannerView.width}, height=${bannerView.height}, visibility=${bannerView.visibility}, parent=${bannerView.parent}")
             }
         } else {
-            Log.e("AppodealBannerView", "getBannerView returned null after show call")
+            Log.d("AppodealBannerView", "getBannerView returned null after show call (banner loading or not filled)")
         }
     } catch (e: Exception) {
         Log.e("AppodealBannerView", "Error in attachBannerView: ${e.message}", e)
