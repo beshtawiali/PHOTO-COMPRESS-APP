@@ -1,5 +1,7 @@
 package com.tayf.photocompressor.ui.screens
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,9 +17,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +36,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,6 +48,9 @@ import com.tayf.photocompressor.ui.theme.RoyalPurplePrimary
 fun PrivacyPolicyScreen(
     onBack: () -> Unit
 ) {
+    val context = LocalContext.current
+    val privacyPolicyUrl = "https://beshtawiali.github.io/PHOTO-COMPRESS-APP/privacy-policy.html"
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -54,7 +62,10 @@ fun PrivacyPolicyScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = onBack) {
+                    IconButton(
+                        onClick = onBack,
+                        modifier = Modifier.testTag("privacy_back_button")
+                    ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
@@ -106,14 +117,14 @@ fun PrivacyPolicyScreen(
                     Spacer(modifier = Modifier.width(16.dp))
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "100% On-Device Privacy",
+                            text = "100% On-Device Image Processing",
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
                             color = RoyalPurplePrimary
                         )
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
-                            text = "Your images never leave your phone. All image compression and resizing occurs entirely offline on your local device.",
+                            text = "Your photos are processed entirely on your local device. Photo Compressor does not upload or store your personal photos on our servers.",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurface
                         )
@@ -121,25 +132,55 @@ fun PrivacyPolicyScreen(
                 }
             }
 
+            // Web Policy Action Button
+            Button(
+                onClick = {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(privacyPolicyUrl))
+                    context.startActivity(intent)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(52.dp)
+                    .testTag("open_web_privacy_policy_button"),
+                shape = RoundedCornerShape(14.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = RoyalPurplePrimary
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.OpenInNew,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(
+                    text = "Open Web Privacy Policy",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp,
+                    color = Color.White
+                )
+            }
+
             // Sections
             PrivacySection(
-                title = "1. Data Collection & Processing",
-                body = "Photo Compressor does NOT collect, upload, store on external servers, or transmit any of your photos, metadata, or personal data. All operations take place locally on your device hardware."
+                title = "1. Local Photo Processing",
+                body = "User-selected photos and images are processed locally on your device hardware. Photo Compressor does not intentionally upload, transfer, or store your personal photos or images on the developer's external servers."
             )
 
             PrivacySection(
-                title = "2. Device Permissions",
-                body = "The app requires read and write access to your photos gallery solely to select images for processing and to save compressed result images back to your phone storage."
+                title = "2. Advertising & Mediation Partners",
+                body = "The app uses Appodeal SDK for advertising and mediation. Appodeal and its mediated advertising partners may process device identifiers (such as Google Advertising ID / AD_ID), device information, IP-derived approximate location, diagnostics, and ad interaction data for ad serving, measurement, analytics, and fraud prevention purposes in accordance with applicable privacy regulations."
             )
 
             PrivacySection(
-                title = "3. Third-Party Services",
-                body = "We do not integrate third-party analytics or tracking SDKs that inspect or read your photos. Analytics are strictly limited to anonymous app crash reports to improve application stability."
+                title = "3. Media Selection & Access",
+                body = "Photo selection uses the system Android Photo Picker, granting the app temporary access only to the specific images you choose to compress or resize, without requiring broad access to your entire media library."
             )
 
             PrivacySection(
-                title = "4. Your Rights & Control",
-                body = "Because all compressed photos are saved locally to your device storage, you retain full ownership and control over your files at all times. You can delete processed photos or history entries whenever you choose."
+                title = "4. Your Rights & Data Choices",
+                body = "You have full ownership of your locally saved images. For privacy requests, consent choices (GDPR/CCPA/EEA), or to read our complete full policy, please view our online Privacy Policy via the button above."
             )
 
             Spacer(modifier = Modifier.height(24.dp))
