@@ -84,6 +84,10 @@ secrets {
 
 googleServices { missingGoogleServicesStrategy = MissingGoogleServicesStrategy.WARN }
 
+configurations.all {
+  exclude(group = "com.android.billingclient")
+}
+
 // Some unused dependencies are commented out below instead of being removed.
 // This makes it easy to add them back in the future if needed.
 dependencies {
@@ -139,7 +143,9 @@ dependencies {
   implementation("io.bidmachine:ads.networks.amazon:12.0.0.0")
   implementation("io.bidmachine:ads.networks.meta_audience:6.21.0.1")
   implementation("io.bidmachine:ads.networks.mintegral:17.1.61.1")
-  implementation("io.bidmachine:ads.networks.my_target:5.47.1.2")
+  implementation("io.bidmachine:ads.networks.my_target:5.47.1.2") {
+    exclude(group = "com.android.billingclient")
+  }
   implementation("io.bidmachine:ads.networks.vungle:7.7.4.0")
 
   // AppLovin MAX
@@ -179,7 +185,9 @@ dependencies {
   implementation("org.bidon:startio-adapter:5.2.4.1")
   implementation("org.bidon:taurusx-adapter:1.12.2.0")
   implementation("org.bidon:unityads-adapter:4.17.0.0")
-  implementation("org.bidon:vkads-adapter:5.47.1.0")
+  implementation("org.bidon:vkads-adapter:5.47.1.0") {
+    exclude(group = "com.android.billingclient")
+  }
   implementation("org.bidon:vungle-adapter:7.7.4.0")
   implementation("org.bidon:yandex-adapter:7.17.0.0")
   implementation("org.bidon:zmaticoo-adapter:2.0.6.0.0")
@@ -200,7 +208,9 @@ dependencies {
   implementation("com.appodeal.ads.sdk.adapters:mintegral:17.1.61.0")
   implementation("com.appodeal.ads.sdk.adapters:mobilefuse:1.11.0.0")
   implementation("com.appodeal.ads.sdk.adapters:moloco:4.3.1.0")
-  implementation("com.appodeal.ads.sdk.adapters:my_target:5.47.1.0")
+  implementation("com.appodeal.ads.sdk.adapters:my_target:5.47.1.0") {
+    exclude(group = "com.android.billingclient")
+  }
   implementation("com.appodeal.ads.sdk.adapters:ogury:6.2.0.0")
   implementation("com.appodeal.ads.sdk.adapters:pubmatic:4.10.0.0")
   implementation("com.appodeal.ads.sdk.adapters:sentry_analytics:8.44.1.0")
