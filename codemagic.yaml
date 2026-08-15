@@ -24,7 +24,7 @@ workflows:
           fi
       - name: Build Android App Bundle
         script: |
-          ./gradlew bundleRelease
+          ./gradlew bundleRelease -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g -Dfile.encoding=UTF-8"
     artifacts:
       - app/build/outputs/**/*.aab
       - app/build/outputs/**/mapping.txt
